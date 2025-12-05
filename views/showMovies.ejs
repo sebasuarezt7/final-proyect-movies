@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+
+<main>
+  <h1>All Movies</h1>
+
+  <div class="movies-grid">
+    <% movies.forEach(movie => { %>
+      <div class="movie-card">
+        <h3><%= movie.name %></h3>
+        <p><strong>Year:</strong> <%= movie.year %></p>
+        <p><strong>Rating:</strong> <%= movie.rating %>/10</p>
+
+        <a class="btn btn-primary" href="/movie/<%= movie._id %>">Details</a>
+
+        <% if (user && user._id.toString() === movie.userId.toString()) { %>
+          <a class="btn btn-primary" href="/edit/<%= movie._id %>">Edit</a>
+          <form method="POST" action="/delete/<%= movie._id %>" style="display:inline;">
+            <button class="btn btn-danger">Delete</button>
+          </form>
+        <% } %>
+      </div>
+    <% }) %>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

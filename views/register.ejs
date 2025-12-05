@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+
+<main>
+  <h1>Register</h1>
+
+  <% if (errors) { %>
+    <% errors.forEach(err => { %>
+      <p class="error-message"><%= err %></p>
+    <% }) %>
+  <% } %>
+
+  <form action="/register" method="POST">
+    <label>Email</label>
+    <input type="email" name="email">
+
+    <label>Password</label>
+    <input type="password" name="password">
+
+    <label>Confirm Password</label>
+    <input type="password" name="confirmPassword">
+
+    <button class="btn btn-primary">Register</button>
+  </form>
+</main>
+
+<%- include('partials/footer') %>
