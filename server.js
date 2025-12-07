@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(helmet());
 
-// SESSIONS
+// SESSIONS (ONLY ONCE)
 app.use(
   session({
     secret: "supersecretkey123",
@@ -25,6 +25,12 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+// MAKE currentUser AVAILABLE IN ALL EJS FILES
+app.use((req, res, next) => {
+  res.locals.currentUser = req.session.user;
+  next();
+});
 
 // EJS setup
 app.set("view engine", "ejs");
