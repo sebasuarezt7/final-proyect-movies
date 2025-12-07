@@ -1,40 +1,129 @@
 const express = require("express");
 const router = express.Router();
 const Movie = require("../models/Movie");
+const requireLogin = require("../middleware/requireLogin");
 
-// GET all movies
+// =============================
+// SHOW ALL MOVIES
+// =============================
 router.get("/", async (req, res) => {
   const movies = await Movie.find();
   res.render("showMovies", { movies });
 });
 
-// FORM: Add movie
-router.get("/add", (req, res) => {
-  res.render("addMovie", { errors: [] });
+// =============================
+// ADD MOVIE (PROTECTED)
+// =============================
+
+// GET Add movie form
+router.get("/add", requireLogin, (req, res) => {
+  res.render("addMovie", { errors: [], oldData: {} });
 });
 
-// POST: Add movie
-router.post("/add", async (req, res) => {
-  res.send("Add movie functionality goes here");
+// POST Add movie
+router.post("/add", requireLogin, async (req, res) => {
+  const { name, description, year, genres, rating } = req.body;
+  const errors = [];
+
+  // Validations
+  if (!name || name.trim() === "") errors.push("Name is required.");
+  if (!description || description.trim() === "") errors.push("Description is required.");
+  if (!year || isNaN(year)) errors.push("Year must be a number.");
+  if (!rating || rating < 1 || rating > 10) errors.push("Rating must be between 1 and 10.");
+
+  if (errors.length > 0) {
+    return res.render("addMovie", { errors, oldData: req.body });
+  }
+
+  await Movie.create({
+    name,
+    description,
+    year,
+    genres: genres.split(",").map(g => g.trim()),
+    rating,
+    createdBy: req.session.user._id
+  });
+
+  res.redirect("/movies");
 });
 
-// Movie details
+// =============================
+// EDIT MOVIE (PROTECTED + OWNER ONLY)
+// =============================
+
+// GET Edit movie form
+router.get("/edit/:id", requireLogin, async (req, res) => {
+  const movie = await Movie.findById(req.params.id);
+
+  if (!movie) return res.send("Movie not found");
+
+  if (movie.createdBy != req.session.user._id) {
+    return res.send("You are not allowed to edit this movie.");
+  }
+
+  res.render("editMovie", { movie, errors: [] });
+});
+
+// POST Edit movie
+router.post("/edit/:id", requireLogin, async (req, res) => {
+  const movie = await Movie.findById(req.params.id);
+
+  if (!movie) return res.send("Movie not found");
+
+  if (movie.createdBy != req.session.user._id) {
+    return res.send("You cannot edit a movie you did not create.");
+  }
+
+  const { name, description, year, genres, rating } = req.body;
+  const errors = [];
+
+  // Validations
+  if (!name || name.trim() === "") errors.push("Name is required.");
+  if (!description || description.trim() === "") errors.push("Description is required.");
+  if (!year || isNaN(year)) errors.push("Year must be a number.");
+  if (!rating || rating < 1 || rating > 10) errors.push("Rating must be between 1 and 10.");
+
+  if (errors.length > 0) {
+    return res.render("editMovie", { movie, errors });
+  }
+
+  await Movie.findByIdAndUpdate(req.params.id, {
+    name,
+    description,
+    year,
+    genres: genres.split(",").map(g => g.trim()),
+    rating
+  });
+
+  res.redirect("/movies/" + req.params.id);
+});
+
+// =============================
+// DELETE MOVIE (PROTECTED + OWNER ONLY)
+// =============================
+router.post("/delete/:id", requireLogin, async (req, res) => {
+  const movie = await Movie.findById(req.params.id);
+
+  if (!movie) return res.send("Movie not found");
+
+  if (movie.createdBy != req.session.user._id) {
+    return res.send("You cannot delete a movie you did not create.");
+  }
+
+  await Movie.findByIdAndDelete(req.params.id);
+
+  res.redirect("/movies");
+});
+
+// =============================
+// MOVIE DETAILS (MUST BE LAST)
+// =============================
 router.get("/:id", async (req, res) => {
-  res.send("Movie details page");
-});
+  const movie = await Movie.findById(req.params.id);
 
-// Edit movie
-router.get("/edit/:id", async (req, res) => {
-  res.send("Edit form goes here");
-});
+  if (!movie) return res.send("Movie not found");
 
-router.post("/edit/:id", async (req, res) => {
-  res.send("Handle edit logic");
-});
-
-// Delete movie
-router.post("/delete/:id", async (req, res) => {
-  res.send("Delete logic here");
+  res.render("movieDetails", { movie });
 });
 
 module.exports = router;

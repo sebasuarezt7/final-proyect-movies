@@ -2,14 +2,7 @@
 
 <main>
   <h1>Add Movie</h1>
-
-  <% if (errors) { %>
-    <% errors.forEach(err => { %>
-      <p class="error-message"><%= err %></p>
-    <% }) %>
-  <% } %>
-
-  <form method="POST" action="/add">
+  <form method="POST" action="/movies/add">
     <label>Name</label>
     <input type="text" name="name">
 
@@ -27,6 +20,11 @@
 
     <button class="btn btn-primary">Submit</button>
   </form>
+  <% if (errors) { %>
+    <% errors.forEach(err => { %>
+      <p class="error-message"><%= err %></p>
+    <% }) %>
+  <% } %>
 </main>
 
 <%- include('partials/footer') %>
