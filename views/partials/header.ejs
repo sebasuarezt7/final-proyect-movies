@@ -5,13 +5,24 @@
 </head>
 <body>
   <header>
-    <h2>MOVIES APP</h2>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/movies">All Movies</a>
-      <a href="/movies/add">Add Movie</a>
+    <div class="header-left">
+      <h2 class="logo-text">MovieVerse</h2>
+  
+      <nav class="nav-left">
+        <a href="/">Home</a>
+        <a href="/movies">All Movies</a>
+        <a href="/movies/add">Add Movie</a>
+      </nav>
+    </div>
+  
+    <div class="header-center">
+      <form action="/movies" method="GET" class="search-header">
+        <input type="text" name="search" placeholder="Search movies...">
+      </form>
+    </div>
+  
+    <div class="header-right">
       <a href="/login">Login</a>
       <a href="/register">Register</a>
-      <a href="/logout">Logout</a>
-    </nav>
+    </div>
   </header>

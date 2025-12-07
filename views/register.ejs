@@ -9,7 +9,7 @@
     <% }) %>
   <% } %>
 
-  <form action="/register" method="POST">
+  <form class="form-container" action="/register" method="POST">
     <label>Username</label>
     <input type="text" name="username">
 
@@ -21,6 +21,13 @@
 
     <button class="btn btn-primary">Register</button>
   </form>
+
+
+  <p class="auth-switch">
+    Already have an account?
+    <a href="/login">Log in</a>
+  </p>
+
 </main>
 
 <%- include('partials/footer') %>
