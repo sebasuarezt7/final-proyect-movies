@@ -2,6 +2,7 @@
 
 <main>
   <div class="movie-details">
+    
     <h1><%= movie.name %></h1>
 
     <p><strong>Description:</strong> <%= movie.description %></p>
@@ -12,14 +13,21 @@
     <hr>
 
     <% if (currentUser && currentUser._id == movie.createdBy.toString()) { %>
-      <a href="/movies/edit/<%= movie._id %>" class="btn btn-primary">Edit Movie</a>
+      <div class="movie-actions">
+        
+        <a href="/movies/edit/<%= movie._id %>" class="btn btn-primary">
+          Edit Movie
+        </a>
 
-      <form action="/movies/delete/<%= movie._id %>" method="POST" style="margin-top: 10px;">
-        <button class="btn btn-danger">Delete Movie</button>
-      </form>
+        <form action="/movies/delete/<%= movie._id %>" method="POST">
+          <button class="btn btn-danger">Delete Movie</button>
+        </form>
+
+      </div>
     <% } %>
 
-    <a href="/movies" style="display:block; margin-top:18px;">← Back to Movies</a>
+      <a href="/movies" class="back-link">← Back to Movies</a>
+
   </div>
 </main>
 

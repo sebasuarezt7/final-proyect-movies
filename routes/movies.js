@@ -7,8 +7,13 @@ const requireLogin = require("../middleware/requireLogin");
 // SHOW ALL MOVIES
 // =============================
 router.get("/", async (req, res) => {
-  const movies = await Movie.find();
-  res.render("showMovies", { movies });
+  const search = req.query.search || "";
+
+  const movies = await Movie.find({
+    name: { $regex: search, $options: "i" }
+  });
+
+  res.render("showMovies", { movies, search });
 });
 
 // =============================

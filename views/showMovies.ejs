@@ -1,21 +1,18 @@
 <%- include('partials/header') %>
 
-<main>
-  <h1>All Movies</h1>
-
+<main class="movies-page">
+    <h1>All Movies</h1>
   <div class="movies-grid">
     <% movies.forEach(movie => { %>
       <div class="movie-card">
-        
         <h3><%= movie.name %></h3>
         <p><strong>Year:</strong> <%= movie.year %></p>
         <p><strong>Rating:</strong> <%= movie.rating %>/10</p>
-
-        <a class="btn btn-primary" href="/movies/<%= movie._id %>">Details</a>
-
+        <a class="btn-link" href="/movies/<%= movie._id %>">Details</a>
       </div>
     <% }) %>
   </div>
+
 </main>
 
 <%- include('partials/footer') %>

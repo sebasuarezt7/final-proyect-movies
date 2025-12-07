@@ -1,10 +1,29 @@
 <%- include('partials/header') %>
 
-<main>
-  <h1>Welcome to Movies App</h1>
-  <p>Find, add and organize your favorite movies.</p>
+<main class="homepage-main">
 
-  <a class="btn btn-primary" href="/movies">View Movies</a>
+  <section class="homepage-hero">
+    <img src="/images/HomePageImage.jpg" class="homepage-image">
+
+    <div class="homepage-overlay"></div>
+
+    <div class="homepage-content">
+      <h1>Start Creating Movies</h1>
+      <p>Add your favorite films and build your personal collection.</p>
+
+      <div class="homepage-buttons">
+
+        <% if (currentUser) { %>
+          <a href="/movies/add" class="btn btn-primary">Add Movie</a>
+        <% } else { %>
+          <a href="/register" class="btn btn-primary">Get Started</a>
+        <% } %>
+
+        <a href="/movies" class="btn btn-primary">View Movies</a>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <%- include('partials/footer') %>
