@@ -283,9 +283,120 @@ form label {
   text-decoration: underline;
 }
 
+/* ====================================================== */
+/* 8. ENHANCED SEARCH AND FILTERS                         */
+/* ====================================================== */
+
+.search-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+}
+
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+}
+
+.search-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-form input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-form select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+  min-width: 150px;
+}
+
+.search-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.search-btn:hover {
+  background: #0056b3;
+}
+
+.clear-search {
+  color: #dc3545;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 5px 8px;
+  border-radius: 3px;
+  transition: background 0.3s;
+}
+
+.clear-search:hover {
+  background: #f8d7da;
+  text-decoration: none;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.no-results p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Star ratings */
+.movie-card p strong + * {
+  font-family: monospace;
+  color: #ffc107;
+}
+
+/* Responsive design for search form */
+@media (max-width: 768px) {
+  .search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-group {
+    flex-direction: column;
+    min-width: auto;
+  }
+  
+  .search-form select,
+  .search-btn {
+    width: 100%;
+  }
+}
+
 
 /* ====================================================== */
-/* 8. FOOTER                                               */
+/* 9. FOOTER                                               */
 /* ====================================================== */
 
 footer {
