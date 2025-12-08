@@ -8,12 +8,52 @@ const requireLogin = require("../middleware/requireLogin");
 // =============================
 router.get("/", async (req, res) => {
   const search = req.query.search || "";
+  const sortBy = req.query.sort || "name";
+  const genre = req.query.genre || "";
+  const minRating = req.query.minRating || "";
 
-  const movies = await Movie.find({
-    name: { $regex: search, $options: "i" }
+  // Build search query
+  let searchQuery = {};
+  
+  // Search by name, description
+  if (search) {
+    searchQuery.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { description: { $regex: search, $options: "i" } }
+    ];
+  }
+  
+  // Filter by genre
+  if (genre) {
+    searchQuery.genres = { $in: [new RegExp(genre, 'i')] };
+  }
+  
+  // Filter by minimum rating
+  if (minRating) {
+    searchQuery.rating = { $gte: parseFloat(minRating) };
+  }
+
+  // Build sort options
+  let sortOptions = {};
+  if (sortBy === "rating") sortOptions = { rating: -1 }; // Highest first
+  else if (sortBy === "year") sortOptions = { year: -1 }; // Newest first
+  else if (sortBy === "name") sortOptions = { name: 1 }; // A-Z
+  else sortOptions = { name: 1 }; // Default
+
+  const movies = await Movie.find(searchQuery).sort(sortOptions);
+  
+  // Get unique genres for filter dropdown
+  const allMovies = await Movie.find({});
+  const allGenres = [...new Set(allMovies.flatMap(movie => movie.genres || []))];
+
+  res.render("showMovies", { 
+    movies, 
+    search, 
+    sortBy, 
+    genre, 
+    minRating,
+    allGenres
   });
-
-  res.render("showMovies", { movies, search });
 });
 
 // =============================
